@@ -1,0 +1,11 @@
+[Unit]
+Description=Restart the system after power shortages
+
+[Timer]
+Unit=keepalive.service
+OnBootSec=0min
+OnUnitActiveSec=1min
+Persistent=true
+
+[Install]
+WantedBy=timers.target
