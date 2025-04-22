@@ -13,10 +13,9 @@ Install with:
 sudo bash install.sh
 ```
 
-You may need to reboot your system.
-To check that the service is running:
+Check that the service is running:
 ```shell
-systemctl status keepalive.timer
+systemctl status keepalive
 ```
 
 Uninstall with:
