@@ -1,8 +1,0 @@
-[Unit]
-Description=Restart the system after power shortages
-
-[Service]
-Type=simple
-Restart=on-failure
-RestartSec=1
-ExecStart=on_ac_power && rtcwake -m no -s 7200 || rtcwake -m off -s 7200

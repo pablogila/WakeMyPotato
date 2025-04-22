@@ -2,5 +2,8 @@
 
 systemctl stop keepalive.timer
 systemctl disable keepalive.timer
-rm -r /etc/systemd/system/keepalive.timer /etc/systemd/system/keepalive.service
+
+rm -rf /etc/systemd/system/keepalive.*
+rm -rf /usr/local/bin/keepalive.sh
+
 systemctl daemon-reload

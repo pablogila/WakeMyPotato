@@ -8,7 +8,7 @@ This service programs an rtcwake call in the next 2 hours and powers down the la
 It will attempt to boot until power is restored.
 This method is not ideal and may fail if the battery gets depleted, but at least is something.
 
-Install with:
+Install from the downloaded `KeepAlive/` folder with:
 ```shell
 sudo bash install.sh
 ```
