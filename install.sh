@@ -1,5 +1,7 @@
 #!/bin/bash
 
+echo 'Installing KeepAlive...'
+
 cp src/keepalive.timer src/keepalive.service /etc/systemd/system/
 chmod 644 /etc/systemd/system/keepalive.timer /etc/systemd/system/keepalive.service
 

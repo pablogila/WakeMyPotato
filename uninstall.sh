@@ -1,5 +1,7 @@
 #!/bin/bash
 
+echo 'Removing KeepAlive...'
+
 systemctl stop keepalive.timer
 systemctl disable keepalive.timer
 

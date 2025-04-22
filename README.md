@@ -1,13 +1,14 @@
 # KeepAlive
 
-KeepAlive is a simple and last-resort systemd service
+KeepAlive is a simple and last-resort systemd Linux service
 to keep your old potato laptop alive in the event of a power failure.
 
 Some old machines lack Wake-On-Lan (WOL) or BIOS boot timers,
 making it difficult to reuse them as home servers.
-This service programs an rtcwake call in the next 2 hours and powers down the laptop if AC fails.
+This service programs an rtcwake call in the next 15 minutes and powers down the laptop if AC fails.
 It will attempt to boot until power is restored.
-This method is not ideal and may fail if the battery gets depleted, but at least is something.
+This method is not ideal and may fail if the battery gets depleted,
+so it should be considered as a last-resort option for old devices.
 
 Install from the downloaded `KeepAlive/` folder with:
 ```shell
