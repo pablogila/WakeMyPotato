@@ -1,6 +1,7 @@
 # KeepAlive
 
-KeepAlive is a simple and last-resort systemd service to keep your old potato laptop alive.
+KeepAlive is a simple and last-resort systemd service
+to keep your old potato laptop alive in the event of a power failure.
 
 Some old machines lack Wake-On-Lan (WOL) or BIOS boot timers,
 making it difficult to reuse them as home servers.

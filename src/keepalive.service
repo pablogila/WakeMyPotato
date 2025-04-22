@@ -3,4 +3,4 @@ Description=Restart the system after power shortages
 
 [Service]
 Type=oneshot
-ExecStart=/usr/local/bin/keepalive.sh
+ExecStart=/usr/local/sbin/keepalive.sh
