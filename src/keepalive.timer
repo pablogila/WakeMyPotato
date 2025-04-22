@@ -4,7 +4,7 @@ Description=Restart the system after power shortages
 [Timer]
 Unit=keepalive.service
 OnBootSec=0
-OnCalendar=*-*-* *:00/1:00
+OnUnitActiveSec=10
 Persistent=true
 
 [Install]
