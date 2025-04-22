@@ -15,7 +15,7 @@ sudo bash install.sh
 
 Check that the service is running:
 ```shell
-systemctl status keepalive
+systemctl status keepalive.timer
 ```
 
 Uninstall with:
