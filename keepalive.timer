@@ -3,7 +3,6 @@ Description=Restart the system after power shortages
 
 [Timer]
 Unit=keepalive.service
-OnBootSec=0min
 OnCalendar=*-*-* *:00/1:00
 Persistent=true
 

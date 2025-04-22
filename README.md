@@ -24,4 +24,6 @@ Uninstall with:
 sudo bash uninstall.sh
 ```
 
+To update, uninstall before installing again.
+
 Any suggestions? Please let me know! :D
