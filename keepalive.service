@@ -3,5 +3,6 @@ Description=Restart the system after power shortages
 
 [Service]
 Type=simple
-Restart=always
+Restart=on-failure
+RestartSec=1
 ExecStart=on_ac_power && rtcwake -m no -s 60 || rtcwake -m off -s 60
