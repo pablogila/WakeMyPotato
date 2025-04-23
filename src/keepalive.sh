@@ -16,11 +16,13 @@ else
         if ! mdadm --detail "$raid_dev" &>/dev/null; then
             continue  # Ignore inactive RAID
         fi
+        disks=$(mdadm --detail "$raid_dev" 2>/dev/null | 
+                awk '/active sync/ && $0 !~ /spare/ {print $NF}' | sort -u)
         mount_point=$(findmnt -n -o TARGET "$raid_dev" 2>/dev/null)
         if [ -n "$mount_point" ]; then
             # Kill processes using the RAID
-            #echo fuser -km "$mount_point" | systemd-cat -t 'keepalive'
-            #fuser -km "$mount_point" || echo "Failed to kill processes on $mount_point" | systemd-cat -p 'warning' -t 'keepalive'
+            echo fuser -km "$mount_point" | systemd-cat -t 'keepalive'
+            fuser -km "$mount_point" || echo "No process killed on $mount_point" | systemd-cat -p 'warning' -t 'keepalive'
             sync; sleep 1
             # Unmount the RAID
             echo umount -f "$mount_point" | systemd-cat -t 'keepalive'
@@ -29,9 +31,6 @@ else
         echo mdadm --stop "$raid_dev" | systemd-cat -t 'keepalive'
         # Stop the RAID
         mdadm --stop "$raid_dev" || echo "Failed to stop $raid_dev" | systemd-cat -p 'warning' -t 'keepalive'
-        # Safely power off the individual disks
-        disks=$(mdadm --detail "$raid_dev" 2>/dev/null | 
-                awk '/active sync/ && $0 !~ /spare/ {print $NF}' | sort -u)
         for disk in $disks; do
             echo udisksctl power-off -b "$disk" | systemd-cat -t 'keepalive'
             udisksctl power-off -b "$disk" || echo "Failed to power-off $disk" | systemd-cat -p 'warning' -t 'keepalive'
