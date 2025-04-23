@@ -6,27 +6,29 @@
 
 ac_status=$(on_ac_power; echo $?)
 if [ "$ac_status" -eq 0 ]; then
-    rtcwake -m no -s 900
+    rtcwake -m no -s 600
 else
     echo 'Emergency shutdown on AC power outage!' | systemd-cat -p 'alert' -t 'keepalive'
+    echo 'Emergency shutdown on AC power outage! The service will restart soon...' | wall
     # Safely force unmount and power-off RAID HDDs
     mdadm --detail --scan | while read -r line; do
         raid_dev=$(echo "$line" | awk '{print $2}' | cut -d'=' -f1 | tr -d '[]')
         if ! mdadm --detail "$raid_dev" &>/dev/null; then
             continue  # Ignore inactive RAID
         fi
-        disks=$(mdadm --detail "$raid_dev" 2>/dev/null | 
-                awk '/active sync/ && $0 !~ /spare/ {print $NF}' | sort -u)
         mount_point=$(findmnt -n -o TARGET "$raid_dev" 2>/dev/null)
         if [ -n "$mount_point" ]; then
             fuser -km "$mount_point" || true  # Kill processes using the RAID
             umount -f "$mount_point" || true  # Force unmount
         fi
         mdadm --stop "$raid_dev" || true  # Stop the RAID
-        for disk in $disks; do  # Safely power off the disks
+        # Safely power off the individual disks
+        disks=$(mdadm --detail "$raid_dev" 2>/dev/null | 
+                awk '/active sync/ && $0 !~ /spare/ {print $NF}' | sort -u)
+        for disk in $disks; do
             udisksctl power-off -b "$disk" || true
         done
     done
-    # Safely power off until AC is back
-    rtcwake -m off -s 900
+    # Safely power off the system for 10 minutes or until AC is back
+    rtcwake -m off -s 600
 fi

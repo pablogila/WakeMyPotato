@@ -5,13 +5,13 @@ to keep your old potato laptop alive in the event of a power failure.
 
 Some old machines lack Wake-On-Lan (WOL) or BIOS boot timers,
 making it difficult to reuse them as home servers.
-This service programs an rtcwake call in the next 15 minutes and safely powers down the laptop if AC fails.
+This service programs an rtcwake call in the next 10 minutes and safely powers down the laptop if AC fails.
 If present, it will safely and forcefully power off RAID HDDs to prevent mechanical wear.
 It will attempt to boot once power is restored.
 
 This method is not ideal and may fail if the battery gets depleted,
 so it should be considered as a last-resort option for old devices
-without WOL or BIOS timers support.
+without WOL nor automatic BIOS wake support.
 
 Install from the downloaded `KeepAlive/` folder with:
 ```shell
