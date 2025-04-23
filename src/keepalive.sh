@@ -18,22 +18,25 @@ else
         fi
         mount_point=$(findmnt -n -o TARGET "$raid_dev" 2>/dev/null)
         if [ -n "$mount_point" ]; then
-            fuser -km "$mount_point" || true  # Kill processes using the RAID
-            umount -f "$mount_point" || true  # Force unmount
             echo fuser -km "$mount_point" | systemd-cat -t 'keepalive'
+            fuser -km "$mount_point" || true  # Kill processes using the RAID
+            sync; sleep 2
             echo umount -f "$mount_point" | systemd-cat -t 'keepalive'
+            umount -f "$mount_point" || true  # Force unmount
         fi
-        mdadm --stop "$raid_dev" || true  # Stop the RAID
         echo mdadm --stop "$raid_dev" | systemd-cat -t 'keepalive'
+        # Stop the RAID
+        mdadm --stop "$raid_dev" || echo "Failed to stop $raid_dev" | systemd-cat -t 'keepalive'
         # Safely power off the individual disks
         disks=$(mdadm --detail "$raid_dev" 2>/dev/null | 
                 awk '/active sync/ && $0 !~ /spare/ {print $NF}' | sort -u)
         for disk in $disks; do
-            udisksctl power-off -b "$disk" || true
             echo udisksctl power-off -b "$disk" | systemd-cat -t 'keepalive'
+            udisksctl power-off -b "$disk" || echo "Failed to power-off $disk" | systemd-cat -t 'keepalive'
         done
     done
     # Safely power off the system for 10 minutes or until AC is back
-    rtcwake -m off -s 600
+    echo 'Shutting down NOW' | systemd-cat -p 'alert' -t 'keepalive'
     echo rtcwake -m off -s 600 | systemd-cat -t 'keepalive'
+    rtcwake -m off -s 600
 fi
