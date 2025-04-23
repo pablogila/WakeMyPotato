@@ -23,7 +23,6 @@ else
             # Kill processes using the RAID
             echo fuser -km "$mount_point" | systemd-cat -t 'keepalive'
             fuser -km "$mount_point" || echo "No process killed on $mount_point" | systemd-cat -p 'warning' -t 'keepalive'
-            sync; sleep 1
             # Unmount the RAID
             echo umount -f "$mount_point" | systemd-cat -t 'keepalive'
             umount -f "$mount_point" || echo "Failed to force unmount $mount_point" | systemd-cat -p 'warning' -t 'keepalive'
@@ -38,6 +37,6 @@ else
     done
     # Safely power off the system for 10 minutes or until AC is back
     echo 'Shutting down NOW' | systemd-cat -p 'alert' -t 'keepalive'
-    echo rtcwake -m off -s 60 | systemd-cat -t 'keepalive'
-    rtcwake -m off -s 60
+    echo rtcwake -m off -s 600 | systemd-cat -t 'keepalive'
+    rtcwake -m off -s 600
 fi
