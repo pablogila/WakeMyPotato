@@ -18,11 +18,13 @@ else
         fi
         mount_point=$(findmnt -n -o TARGET "$raid_dev" 2>/dev/null)
         if [ -n "$mount_point" ]; then
+            # Kill processes using the RAID
             echo fuser -km "$mount_point" | systemd-cat -t 'keepalive'
-            fuser -km "$mount_point" || true  # Kill processes using the RAID
+            fuser -km "$mount_point" || echo "Failed to kill processes on $mount_point" | systemd-cat -t 'keepalive'
             sync; sleep 2
+            # Unmount the RAID
             echo umount -f "$mount_point" | systemd-cat -t 'keepalive'
-            umount -f "$mount_point" || true  # Force unmount
+            umount -f "$mount_point" || echo "Failed to force unmount $mount_point" | systemd-cat -t 'keepalive'
         fi
         echo mdadm --stop "$raid_dev" | systemd-cat -t 'keepalive'
         # Stop the RAID
