@@ -37,6 +37,6 @@ else
     done
     # Safely power off the system for 10 minutes or until AC is back
     echo 'Shutting down NOW' | systemd-cat -p 'alert' -t 'keepalive'
-    echo rtcwake -m off -s 600 | systemd-cat -t 'keepalive'
-    rtcwake -m off -s 600
+    echo rtcwake -m off -s 60 | systemd-cat -t 'keepalive'
+    rtcwake -m off -s 60
 fi
