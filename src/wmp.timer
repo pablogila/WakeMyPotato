@@ -1,8 +1,8 @@
 [Unit]
-Description=Restart the system after power outages
+Description=WakeMyPotato: Restart the system after power outages
 
 [Timer]
-Unit=keepalive.service
+Unit=wmp.service
 OnBootSec=0
 OnCalendar=*-*-* *:00/01:00
 Persistent=true

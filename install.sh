@@ -1,13 +1,13 @@
 #!/bin/bash
 
-echo 'Installing KeepAlive...'
+echo 'Installing WakeMyPotato...'
 
-cp src/keepalive.timer src/keepalive.service /etc/systemd/system/
-chmod 644 /etc/systemd/system/keepalive.timer /etc/systemd/system/keepalive.service
+cp src/wmp.timer src/wmp.service /etc/systemd/system/
+chmod 644 /etc/systemd/system/wmp.timer /etc/systemd/system/wmp.service
 
-cp src/keepalive.sh /usr/local/sbin/keepalive.sh
-chmod 744 /usr/local/sbin/keepalive.sh
+cp src/wmp.sh /usr/local/sbin/wmp.sh
+chmod 744 /usr/local/sbin/wmp.sh
 
 systemctl daemon-reload
-systemctl enable keepalive.timer
-systemctl start keepalive.timer
+systemctl enable wmp.timer
+systemctl start wmp.timer

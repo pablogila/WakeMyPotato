@@ -1,11 +1,11 @@
 #!/bin/bash
 
-echo 'Removing KeepAlive...'
+echo 'Removing WakeMyPotato...'
 
-systemctl stop keepalive.timer
-systemctl disable keepalive.timer
+systemctl stop wmp.timer
+systemctl disable wmp.timer
 
-rm -rf /etc/systemd/system/keepalive.*
-rm -rf /usr/local/sbin/keepalive.sh
+rm -rf /etc/systemd/system/wmp.*
+rm -rf /usr/local/sbin/wmp.sh
 
 systemctl daemon-reload
