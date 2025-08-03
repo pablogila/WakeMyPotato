@@ -3,4 +3,4 @@ Description=WakeMyPotato: Restart the system after power outages
 
 [Service]
 Type=oneshot
-ExecStart=/usr/local/sbin/wmp.sh
+# ExecStart=/usr/local/sbin/wmp.sh 600
