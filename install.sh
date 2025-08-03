@@ -30,3 +30,4 @@ systemctl start wmp.timer
 echo "WakeMyPotato installed succesfully!"
 echo "To check the status:    systemctl status wmp.timer"
 echo "To remove the service:  sudo bash uninstall.sh"
+echo "To check the logs:      sudo journalctl -u wmp -p warning -r"
