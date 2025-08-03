@@ -9,3 +9,5 @@ rm -rf /etc/systemd/system/wmp.*
 rm -rf /usr/local/sbin/wmp.sh
 
 systemctl daemon-reload
+
+echo "All clear."
