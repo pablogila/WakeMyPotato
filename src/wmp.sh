@@ -1,5 +1,5 @@
 #!/bin/bash
-# v1.2.2
+# v1.2.3
 # This script is part of the WakeMyPotato (WMP) systemd service.
 # https://github.com/pablogila/WakeMyPotato
 # It will safely power off RAID disks before an emergency shutdown on AC outage.
@@ -25,7 +25,11 @@ if [ "$ac_status" -ne 0 ]; then
         if [ -n "$mount_point" ]; then
             # Kill processes using the RAID
             echo fuser -km "$mount_point" | systemd-cat -t 'wmp'
-            fuser -km "$mount_point" || echo "No process killed on $mount_point" | systemd-cat -p 'warning' -t 'wmp'
+            if fuser -km "$mount_point"; then
+                echo "Processes were killed on $mount_point" | systemd-cat -p 'warning' -t 'wmp'
+            else
+                echo "No process killed on $mount_point" | systemd-cat -t 'wmp'
+            fi
             # Unmount the RAID
             echo umount -f "$mount_point" | systemd-cat -t 'wmp'
             umount -f "$mount_point" || echo "Failed to force unmount $mount_point" | systemd-cat -p 'warning' -t 'wmp'
