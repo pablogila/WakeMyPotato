@@ -1,5 +1,5 @@
 #!/bin/bash
-# v1.2.0
+# v1.2.1
 # This script is part of the WakeMyPotato (WMP) systemd service.
 # https://github.com/pablogila/WakeMyPotato
 # It will safely power off RAID disks before an emergency shutdown on AC outage.
