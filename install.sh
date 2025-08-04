@@ -45,4 +45,4 @@ systemctl enable wmp.timer
 systemctl start wmp.timer
 
 echo "  WakeMyPotato installed succesfully!"
-echo "  Use 'wmp help' for info on user commands."
+echo "  Use 'sudo wmp help' for info on user commands."
