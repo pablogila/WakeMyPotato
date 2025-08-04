@@ -4,9 +4,9 @@
 # It will safely power off RAID disks before an emergency shutdown on AC outage.
 # The system is automatically restored after timeout or once power is back.
 
-version="v2.0.0a5"
+version="v2.0.0a6"
 
-if [ "$1" -eq "help" ]; then
+if [ "$1" = "help" ]; then
     echo ""
     echo "  WakeMyPotato user commands:"
     echo ""
