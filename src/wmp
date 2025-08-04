@@ -4,7 +4,7 @@
 # It will safely power off RAID disks before an emergency shutdown on AC outage.
 # The system is automatically restored after timeout or once power is back.
 
-version="v2.0.0a10"
+version="v2.0.0a11"
 
 if [ "$1" = "help" ]; then
     echo ""
@@ -24,6 +24,7 @@ elif [ "$1" = "version" ]; then
     echo "$version"
 
 elif [ "$1" = "status" ]; then
+    cat /etc/systemd/system/wmp.service
     systemctl status wmp.timer
 
 elif [ "$1" = "log" ]; then
@@ -35,7 +36,7 @@ elif [ "$1" = "set" ]; then
         exit 1
     fi 
     if [[ "$3" == 'n' || "$3" == 'y' ]]; then
-        /usr/local/sbin/wmp-run $2 $3
+        sed -i "s|^ExecStart=.*|ExecStart=/usr/local/sbin/wmp-run $2 $3|" /etc/systemd/system/wmp.service
     else
         echo "  Invalid input, please enter battery status as 'y' or 'n'! Aborting..."
         exit 1
