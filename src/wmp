@@ -4,14 +4,14 @@
 # It will safely power off RAID disks before an emergency shutdown on AC outage.
 # The system is automatically restored after timeout or once power is back.
 
-version="v2.0.0a3"
+version="v2.0.0a5"
 
 if [ "$1" -eq "help" ]; then
     echo ""
     echo "  WakeMyPotato user commands:"
     echo ""
-    echo "  wmp version                              Print the software version"
-    echo "  wmp status                               Check the service status"
+    echo "  sudo wmp version                              Print the software version"
+    echo "  sudo wmp status                               Check the service status"
     echo "  sudo wmp log                             View warning logs"
     echo "  sudo wmp set <seconds> <battery(y/n)>    Set new configuration"
     echo "  sudo wmp run <seconds> <battery(y/n)>    Run a manual check"
@@ -35,7 +35,7 @@ elif [ "$1" = "set" ]; then
         exit 1
     fi
     if [ [ "$battery" = 'n' ] || [ "$battery" = 'y' ] ]; then
-        /opt/wmp/wmp-run $2 $3
+        /usr/local/sbin/wmp-run $2 $3
     else
         echo "  Invalid input, please enter battery status as 'y' or 'n'! Aborting..."
         exit 1
@@ -49,7 +49,7 @@ elif [ "$1" = "run" ]; then
         exit 1
     fi
     if [ [ "$battery" = 'n' ] || [ "$battery" = 'y' ] ]; then
-        /opt/wmp/wmp-run $2 $3
+        /usr/local/sbin/wmp-run $2 $3
     else
         echo "  Invalid input, please enter battery status as 'y' or 'n'! Aborting..."
         exit 1
@@ -69,8 +69,7 @@ elif [ "$1" = "uninstall" ]; then
     echo "  Removing WakeMyPotato..."
     systemctl stop wmp.timer
     systemctl disable wmp.timer
-    rm -rf /etc/systemd/system/wmp.*
-    rm -rf /opt/wmp
+    rm -rf /etc/systemd/system/wmp.* /usr/local/sbin/wmp-run /usr/local/sbin/wmp
     systemctl daemon-reload
     echo "  All clear."
 

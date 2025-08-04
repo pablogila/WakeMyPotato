@@ -4,9 +4,8 @@ echo "  Welcome to the WakeMyPotato installer!"
 
 cp src/wmp.timer src/wmp.service /etc/systemd/system/
 chmod 644 /etc/systemd/system/wmp.timer /etc/systemd/system/wmp.service
-mkdir /opt/wmp/
-cp src/wmp src/wmp-run /opt/wmp/
-chmod 744 /opt/wmp/*
+cp src/wmp src/wmp-run /usr/local/sbin/
+chmod 744 /usr/local/sbin/wmp /usr/local/sbin/wmp-run
 
 echo "  Enter seconds to wake up after a blackout,"
 echo "  leave empty to use the default 600 seconds:"
@@ -18,7 +17,7 @@ fi
 if [[ ! "$timeout" =~ ^[0-9]+$ ]]; then
     echo "  Invalid input, please enter a positive integer! Aborting..."
     rm -rf /etc/systemd/system/wmp.*
-    rm -rf /opt/wmp
+    rm -rf /usr/local/sbin/wmp /usr/local/sbin/wmp-run
     exit 1
 fi
 
@@ -31,13 +30,13 @@ if [[ -z "$battery" ]]; then
     battery='y'
 fi
 if [ "$battery" = 'n' ]; then
-    sed -i "s|^ExecStart=.*|ExecStart=/opt/wmp/wmp-run $timeout n|" /etc/systemd/system/wmp.service
+    sed -i "s|^ExecStart=.*|ExecStart=/usr/local/sbin/wmp-run $timeout n|" /etc/systemd/system/wmp.service
 elif [ "$battery" = 'y' ]; then
-    sed -i "s|^ExecStart=.*|ExecStart=/opt/wmp/wmp-run $timeout y|" /etc/systemd/system/wmp.service
+    sed -i "s|^ExecStart=.*|ExecStart=/usr/local/sbin/wmp-run $timeout y|" /etc/systemd/system/wmp.service
 else
     echo "  Invalid input, please enter 'y' or 'n'! Aborting..."
     rm -rf /etc/systemd/system/wmp.*
-    rm -rf /opt/wmp
+    rm -rf /usr/local/sbin/wmp /usr/local/sbin/wmp-run
     exit 1
 fi
 
@@ -45,7 +44,5 @@ systemctl daemon-reload
 systemctl enable wmp.timer
 systemctl start wmp.timer
 
-echo "WakeMyPotato installed succesfully!"
-echo "To check the status:    systemctl status wmp.timer"
-echo "To check the logs:      sudo journalctl -u wmp -p warning -r"
-echo "To remove the service:  sudo bash uninstall.sh"
+echo "  WakeMyPotato installed succesfully!"
+echo "  Use 'wmp help' for info on user commands."
