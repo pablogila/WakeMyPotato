@@ -4,7 +4,7 @@
 # It will safely power off RAID disks before an emergency shutdown on AC outage.
 # The system is automatically restored after timeout or once power is back.
 
-version="v2.0.0a6"
+version="v2.0.0a7"
 
 if [ "$1" = "help" ]; then
     echo ""
@@ -30,11 +30,11 @@ elif [ "$1" = "log" ]; then
     sudo journalctl -u wmp -p warning -r
 
 elif [ "$1" = "set" ]; then
-    if [[ ! "$timeout" =~ ^[0-9]+$ ]]; then
+    if [[ ! "$2" =~ ^[0-9]+$ ]]; then
         echo "  Invalid input, please enter a positive integer! Aborting..."
         exit 1
     fi
-    if [ [ "$battery" = 'n' ] || [ "$battery" = 'y' ] ]; then
+    if [ [ "$3" = 'n' ] || [ "$3" = 'y' ] ]; then
         /usr/local/sbin/wmp-run $2 $3
     else
         echo "  Invalid input, please enter battery status as 'y' or 'n'! Aborting..."
@@ -44,11 +44,11 @@ elif [ "$1" = "set" ]; then
     echo "  Configuration updated successfully!"
 
 elif [ "$1" = "run" ]; then
-    if [[ ! "$timeout" =~ ^[0-9]+$ ]]; then
+    if [[ ! "$2" =~ ^[0-9]+$ ]]; then
         echo "  Invalid input, please enter a positive integer! Aborting..."
         exit 1
     fi
-    if [ [ "$battery" = 'n' ] || [ "$battery" = 'y' ] ]; then
+    if [ [ "$3" = 'n' ] || [ "$3" = 'y' ] ]; then
         /usr/local/sbin/wmp-run $2 $3
     else
         echo "  Invalid input, please enter battery status as 'y' or 'n'! Aborting..."
