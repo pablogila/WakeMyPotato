@@ -4,6 +4,7 @@ echo "  Welcome to the WakeMyPotato installer!"
 
 cp src/wmp.timer src/wmp.service /etc/systemd/system/
 chmod 644 /etc/systemd/system/wmp.timer /etc/systemd/system/wmp.service
+mkdir /opt/wmp/
 cp src/wmp src/wmp-run /opt/wmp/
 chmod 744 /opt/wmp/*
 
