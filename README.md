@@ -42,7 +42,7 @@ If you no longer want to use WMP, just run the **uninstall** script:
 sudo bash uninstall.sh
 ```
 
-To **update**, simply uninstall before installing again.
+To **update**, simply uninstall with your current version before installing the new version.
 
 ## System logs
 

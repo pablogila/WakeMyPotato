@@ -3,5 +3,4 @@ Description=WakeMyPotato: Restart the system after power outages
 
 [Service]
 Type=oneshot
-# Custom wait time will be set while installing the service, e.g.
-# ExecStart=/usr/local/sbin/wmp.sh 600
+ExecStart=/opt/wmp/wmp-run 600 y

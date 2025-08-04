@@ -1,25 +1,39 @@
 #!/bin/bash
 
-echo "Welcome to the WakeMyPotato installer!"
+echo "  Welcome to the WakeMyPotato installer!"
 
 cp src/wmp.timer src/wmp.service /etc/systemd/system/
 chmod 644 /etc/systemd/system/wmp.timer /etc/systemd/system/wmp.service
-cp src/wmp.sh /usr/local/sbin/wmp.sh
-chmod 744 /usr/local/sbin/wmp.sh
+cp src/wmp src/wmp-run /opt/wmp/
+chmod 744 /opt/wmp/*
 
-echo "Enter seconds to wake up after a blackout,"
-echo "leave empty to use the default 600 seconds:"
-read -p "> " timeout
+echo "  Enter seconds to wake up after a blackout,"
+echo "  leave empty to use the default 600 seconds:"
+read -p "  > " timeout
 
 if [[ -z "$timeout" ]]; then
     timeout=600
 fi
-if [[ "$timeout" =~ ^[0-9]+$ ]]; then
-    echo "ExecStart=/usr/local/sbin/wmp.sh $timeout" >> /etc/systemd/system/wmp.service
-else
-    echo "Invalid input, please enter a positive integer! Aborting..."
+if [[ ! "$timeout" =~ ^[0-9]+$ ]]; then
+    echo "  Invalid input, please enter a positive integer! Aborting..."
     rm -rf /etc/systemd/system/wmp.*
-    rm -rf /usr/local/sbin/wmp.sh
+    rm -rf /opt/wmp
+    exit 1
+fi
+
+echo "  Does your device have a battery that lasts at least 2 minutes?"
+echo "  this will enable the emergency shutdown"
+echo "  to prevent mechanical wear on HDDs (y/n)"
+read -p "  > " battery
+
+if [ "$battery" =~ ^[Nn][Oo]?$ ]; then
+    sed -i "s|^ExecStart=.*|ExecStart=/opt/wmp/wmp-run $timeout n|" /etc/systemd/system/wmp.service
+elif [ "$battery" =~ ^[Yy][ee]?[Ss]?$ ]; then
+    sed -i "s|^ExecStart=.*|ExecStart=/opt/wmp/wmp-run $timeout y|" /etc/systemd/system/wmp.service
+else
+    echo "  Invalid input, please enter 'y' or 'n'! Aborting..."
+    rm -rf /etc/systemd/system/wmp.*
+    rm -rf /opt/wmp
     exit 1
 fi
 

@@ -1,13 +1,20 @@
 #!/bin/bash
-# v1.2.5
 # This script is part of the WakeMyPotato (WMP) systemd service.
 # https://github.com/pablogila/WakeMyPotato
 # It will safely power off RAID disks before an emergency shutdown on AC outage.
 # The system is automatically restored after timeout or once power is back.
 
+# The first argument specifies the timeout in seconds,
+# the second argument indicates if the device has a battery (y/n).
+
 # New wake up call, without powering off the system.
 # This runs first, in case the battery is so low that the rest of the script cannot run!
 rtcwake -m no -s $1
+
+# If the second argument exists and indicates no battery, ignore the AC power check
+if [ "$2" =~ ^[Nn][Oo]?$ ]
+    exit
+fi
 
 # If there is no AC power but the system is still running, let's shut it down safely
 ac_status=$(on_ac_power; echo $?)

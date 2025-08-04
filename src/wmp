@@ -1,0 +1,81 @@
+#!/bin/bash
+# This script is part of the WakeMyPotato (WMP) systemd service.
+# https://github.com/pablogila/WakeMyPotato
+# It will safely power off RAID disks before an emergency shutdown on AC outage.
+# The system is automatically restored after timeout or once power is back.
+
+version="v2.0.0a1"
+
+if [ "$1" -eq "help" ]; then
+    echo ""
+    echo "  WakeMyPotato user commands:"
+    echo ""
+    echo "  wmp version                              Print the software version"
+    echo "  wmp status                               Check the service status"
+    echo "  sudo wmp log                             View warning logs"
+    echo "  sudo wmp set <seconds> <battery(y/n)>    Set new configuration"
+    echo "  sudo wmp run <seconds> <battery(y/n)>    Run a manual check"
+    echo "  sudo wmp stop                            Stop the service"
+    echo "  sudo wmp start                           Start the service"
+    echo "  sudo wmp uninstall                       Uninstall the service"
+    echo ""
+
+elif [ "$1" -eq "version" ]; then
+    echo "$version"
+
+elif [ "$1" -eq "status" ]; then
+    systemctl status wmp.timer
+
+elif [ "$1" -eq "log" ]; then
+    sudo journalctl -u wmp -p warning -r
+
+elif [ "$1" -eq "set" ]; then
+    if [[ ! "$timeout" =~ ^[0-9]+$ ]]; then
+        echo "  Invalid input, please enter a positive integer! Aborting..."
+        exit 1
+    fi
+    if [ "$battery" =~ ^[Nn][Oo]?$ ]; then
+        sed -i "s|^ExecStart=.*|ExecStart=/opt/wmp/wmp-run $2 n|" /etc/systemd/system/wmp.service
+    elif [ "$battery" =~ ^[Yy][ee]?[Ss]?$ ]; then
+        sed -i "s|^ExecStart=.*|ExecStart=/opt/wmp/wmp-run $2 y|" /etc/systemd/system/wmp.service
+    else
+        echo "  Invalid input, please enter battery status as 'y' or 'n'! Aborting..."
+        exit 1
+    fi
+    systemctl daemon-reload
+    echo "  Configuration updated successfully!"
+
+elif [ "$1" -eq "run" ]; then
+    if [[ ! "$timeout" =~ ^[0-9]+$ ]]; then
+        echo "  Invalid input, please enter a positive integer! Aborting..."
+        exit 1
+    fi
+    if [ [ "$battery" =~ ^[Nn][Oo]?$ ] || [ "$battery" =~ ^[Yy][ee]?[Ss]?$ ] ]; then
+        /opt/wmp/wmp-run $2 $3
+    else
+        echo "  Invalid input, please enter battery status as 'y' or 'n'! Aborting..."
+        exit 1
+    fi
+
+elif [ "$1" -eq "stop" ]; then
+    systemctl stop wmp.timer
+    systemctl disable wmp.timer
+    systemctl daemon-reload
+
+elif [ "$1" -eq "start" ]; then
+    systemctl daemon-reload
+    systemctl enable wmp.timer
+    systemctl start wmp.timer
+
+elif [ "$1" -eq "uninstall" ]; then
+    echo "  Removing WakeMyPotato..."
+    systemctl stop wmp.timer
+    systemctl disable wmp.timer
+    rm -rf /etc/systemd/system/wmp.*
+    rm -rf /opt/wmp
+    systemctl daemon-reload
+    echo "  All clear."
+
+else
+    echo "  Invalid command. Use 'wmp help' to see available commands."
+fi
