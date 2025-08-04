@@ -26,9 +26,12 @@ echo "  this will enable the emergency shutdown"
 echo "  to prevent mechanical wear on HDDs (y/n)"
 read -p "  > " battery
 
-if [ "$battery" -eq "n" ]; then
+if [[ -z "$battery" ]]; then
+    battery='y'
+fi
+if [ "$battery" -eq 'n' ]; then
     sed -i "s|^ExecStart=.*|ExecStart=/opt/wmp/wmp-run $timeout n|" /etc/systemd/system/wmp.service
-elif [ "$battery" -eq "y" ]; then
+elif [ "$battery" -eq 'y' ]; then
     sed -i "s|^ExecStart=.*|ExecStart=/opt/wmp/wmp-run $timeout y|" /etc/systemd/system/wmp.service
 else
     echo "  Invalid input, please enter 'y' or 'n'! Aborting..."

@@ -4,7 +4,7 @@
 # It will safely power off RAID disks before an emergency shutdown on AC outage.
 # The system is automatically restored after timeout or once power is back.
 
-version="v2.0.0a2"
+version="v2.0.0a3"
 
 if [ "$1" -eq "help" ]; then
     echo ""
@@ -34,7 +34,7 @@ elif [ "$1" -eq "set" ]; then
         echo "  Invalid input, please enter a positive integer! Aborting..."
         exit 1
     fi
-    if [ [ "$battery" -eq "n" ] || [ "$battery" -eq "y" ] ]; then
+    if [ [ "$battery" -eq 'n' ] || [ "$battery" -eq 'y' ] ]; then
         /opt/wmp/wmp-run $2 $3
     else
         echo "  Invalid input, please enter battery status as 'y' or 'n'! Aborting..."
@@ -48,7 +48,7 @@ elif [ "$1" -eq "run" ]; then
         echo "  Invalid input, please enter a positive integer! Aborting..."
         exit 1
     fi
-    if [ [ "$battery" -eq "n" ] || [ "$battery" -eq "y" ] ]; then
+    if [ [ "$battery" -eq 'n' ] || [ "$battery" -eq 'y' ] ]; then
         /opt/wmp/wmp-run $2 $3
     else
         echo "  Invalid input, please enter battery status as 'y' or 'n'! Aborting..."
