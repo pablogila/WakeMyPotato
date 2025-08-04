@@ -13,7 +13,7 @@ rtcwake -m no -s $1
 
 # If the second argument exists and indicates no battery, ignore the AC power check
 if [ "$2" = "n" ]; then
-    exit 1
+    exit 0
 elif ![ "$2" = "y" ]; then
     echo "  Invalid input, please enter 'y' or 'n'! Aborting..."
     exit 1
