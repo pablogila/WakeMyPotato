@@ -20,21 +20,21 @@ if [ "$1" -eq "help" ]; then
     echo "  sudo wmp uninstall                       Uninstall the service"
     echo ""
 
-elif [ "$1" -eq "version" ]; then
+elif [ "$1" = "version" ]; then
     echo "$version"
 
-elif [ "$1" -eq "status" ]; then
+elif [ "$1" = "status" ]; then
     systemctl status wmp.timer
 
-elif [ "$1" -eq "log" ]; then
+elif [ "$1" = "log" ]; then
     sudo journalctl -u wmp -p warning -r
 
-elif [ "$1" -eq "set" ]; then
+elif [ "$1" = "set" ]; then
     if [[ ! "$timeout" =~ ^[0-9]+$ ]]; then
         echo "  Invalid input, please enter a positive integer! Aborting..."
         exit 1
     fi
-    if [ [ "$battery" -eq 'n' ] || [ "$battery" -eq 'y' ] ]; then
+    if [ [ "$battery" = 'n' ] || [ "$battery" = 'y' ] ]; then
         /opt/wmp/wmp-run $2 $3
     else
         echo "  Invalid input, please enter battery status as 'y' or 'n'! Aborting..."
@@ -43,29 +43,29 @@ elif [ "$1" -eq "set" ]; then
     systemctl daemon-reload
     echo "  Configuration updated successfully!"
 
-elif [ "$1" -eq "run" ]; then
+elif [ "$1" = "run" ]; then
     if [[ ! "$timeout" =~ ^[0-9]+$ ]]; then
         echo "  Invalid input, please enter a positive integer! Aborting..."
         exit 1
     fi
-    if [ [ "$battery" -eq 'n' ] || [ "$battery" -eq 'y' ] ]; then
+    if [ [ "$battery" = 'n' ] || [ "$battery" = 'y' ] ]; then
         /opt/wmp/wmp-run $2 $3
     else
         echo "  Invalid input, please enter battery status as 'y' or 'n'! Aborting..."
         exit 1
     fi
 
-elif [ "$1" -eq "stop" ]; then
+elif [ "$1" = "stop" ]; then
     systemctl stop wmp.timer
     systemctl disable wmp.timer
     systemctl daemon-reload
 
-elif [ "$1" -eq "start" ]; then
+elif [ "$1" = "start" ]; then
     systemctl daemon-reload
     systemctl enable wmp.timer
     systemctl start wmp.timer
 
-elif [ "$1" -eq "uninstall" ]; then
+elif [ "$1" = "uninstall" ]; then
     echo "  Removing WakeMyPotato..."
     systemctl stop wmp.timer
     systemctl disable wmp.timer

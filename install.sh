@@ -30,9 +30,9 @@ read -p "  > " battery
 if [[ -z "$battery" ]]; then
     battery='y'
 fi
-if [ "$battery" -eq 'n' ]; then
+if [ "$battery" = 'n' ]; then
     sed -i "s|^ExecStart=.*|ExecStart=/opt/wmp/wmp-run $timeout n|" /etc/systemd/system/wmp.service
-elif [ "$battery" -eq 'y' ]; then
+elif [ "$battery" = 'y' ]; then
     sed -i "s|^ExecStart=.*|ExecStart=/opt/wmp/wmp-run $timeout y|" /etc/systemd/system/wmp.service
 else
     echo "  Invalid input, please enter 'y' or 'n'! Aborting..."
