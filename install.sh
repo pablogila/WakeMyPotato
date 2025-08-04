@@ -23,7 +23,7 @@ fi
 
 echo "  Does your device have a battery that lasts at least 2 minutes?"
 echo "  this will enable the emergency shutdown"
-echo "  to prevent mechanical wear on HDDs (y/n)"
+echo "  to prevent mechanical wear on HDDs (y/n) (defaults to 'y'):"
 read -p "  > " battery
 
 if [[ -z "$battery" ]]; then
