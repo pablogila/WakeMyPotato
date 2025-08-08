@@ -4,20 +4,20 @@
 # It will safely power off RAID disks before an emergency shutdown on AC outage.
 # The system is automatically restored after timeout or once power is back.
 
-version="v2.0.1"
+version="v2.0.2"
 
 if [ "$1" = "help" ]; then
     echo ""
     echo "  WakeMyPotato user commands:"
     echo ""
-    echo "  sudo wmp version                              Print the software version"
-    echo "  sudo wmp status                               Check the service status"
-    echo "  sudo wmp log                             View warning logs"
-    echo "  sudo wmp set <seconds> <battery(y/n)>    Set new configuration"
-    echo "  sudo wmp run <seconds> <battery(y/n)>    Run a manual check"
-    echo "  sudo wmp stop                            Stop the service"
-    echo "  sudo wmp start                           Start the service"
-    echo "  sudo wmp uninstall                       Uninstall the service"
+    echo "  sudo wmp version                       Print the software version"
+    echo "  sudo wmp status                        Check the service status"
+    echo "  sudo wmp log                           View warning logs"
+    echo "  sudo wmp set <seconds> <battery(y/n)>  Set new configuration"
+    echo "  sudo wmp run <seconds> <battery(y/n)>  Run a manual check"
+    echo "  sudo wmp stop                          Stop the service"
+    echo "  sudo wmp start                         Start the service"
+    echo "  sudo wmp uninstall                     Uninstall the service"
     echo ""
 
 elif [ "$1" = "version" ]; then
