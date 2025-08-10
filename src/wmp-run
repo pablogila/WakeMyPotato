@@ -3,21 +3,11 @@
 # https://github.com/pablogila/WakeMyPotato
 # It will safely power off RAID disks before an emergency shutdown on AC outage.
 # The system is automatically restored after timeout or once power is back.
-
-# The first argument specifies the timeout in seconds,
-# the second argument indicates if the device has a battery (y/n).
+# The argument specifies the timeout for the rtcwake call in seconds.
 
 # New wake up call, without powering off the system.
 # This runs first, in case the battery is so low that the rest of the script cannot run!
 rtcwake -m no -s $1
-
-# If the second argument exists and indicates no battery, ignore the AC power check
-if [ "$2" = "n" ]; then
-    exit 0
-elif [ "$2" != "y" ]; then
-    echo "  Invalid input, please enter 'y' or 'n'! Aborting..."
-    exit 1
-fi
 
 # If there is no AC power but the system is still running, let's shut it down safely
 ac_status=$(on_ac_power; echo $?)
