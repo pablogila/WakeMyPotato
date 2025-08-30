@@ -1,3 +1,7 @@
+# /etc/systemd/system/wmp.timer
+# This file is part of the WakeMyPotato (WMP) systemd service.
+# https://github.com/pablogila/WakeMyPotato
+
 [Unit]
 Description=WakeMyPotato: Restart the system after power outages
 

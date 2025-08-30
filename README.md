@@ -54,7 +54,7 @@ To check all available commands, use `sudo wmp help`.
 
 ## Contribute  
 
-Any suggestions? Issues and PR are well received! :D
+Any suggestions? Issues and PRs are well received! :D
 
 ## License
 

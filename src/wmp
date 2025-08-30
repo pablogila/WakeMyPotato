@@ -1,24 +1,28 @@
 #!/bin/bash
-# This script is part of the WakeMyPotato (WMP) systemd service.
+# /usr/local/sbin/wmp
+# This file is part of the WakeMyPotato (WMP) systemd service.
 # https://github.com/pablogila/WakeMyPotato
 # It will safely power off RAID disks before an emergency shutdown on AC outage.
 # The system is automatically restored after timeout or once power is back.
 
-version="v2.1.0"
+version="v2.2.0"
 
 if [ "$1" = "help" ]; then
     echo ""
-    echo "  WakeMyPotato user commands:"
+    echo "WakeMyPotato user commands:"
     echo ""
-    echo "  sudo wmp help           Show this help message"
-    echo "  sudo wmp version        Print the software version"
-    echo "  sudo wmp status         Check the service status"
-    echo "  sudo wmp log            View warning logs"
-    echo "  sudo wmp set <seconds>  Set new configuration"
-    echo "  sudo wmp run <seconds>  Run a manual check"
-    echo "  sudo wmp stop           Stop the service"
-    echo "  sudo wmp start          Start the service"
-    echo "  sudo wmp uninstall      Uninstall the service"
+    echo "sudo wmp help           Show this help message"
+    echo "sudo wmp version        Print the software version"
+    echo "sudo wmp status         Check the service status"
+    echo "sudo wmp log            View warning logs"
+    echo "sudo wmp set <seconds>  Set new configuration"
+    echo "sudo wmp run <seconds>  Run a manual check"
+    echo "sudo wmp stop           Stop the service"
+    echo "sudo wmp start          Start the service"
+    echo "sudo wmp uninstall      Uninstall the service"
+    echo ""
+    echo "Visit the project page for more info and updates:"
+    echo "https://github.com/pablogila/WakeMyPotato"
     echo ""
 
 elif [ "$1" = "version" ]; then
@@ -34,16 +38,16 @@ elif [ "$1" = "log" ]; then
 
 elif [ "$1" = "set" ]; then
     if [[ ! "$2" =~ ^[0-9]+$ ]]; then
-        echo "  Invalid input, please enter a positive integer! Aborting..."
+        echo "Invalid input, please enter a positive integer! Aborting..." >&2
         exit 1
     fi 
     sed -i "s|^ExecStart=.*|ExecStart=/usr/local/sbin/wmp-run $2|" /etc/systemd/system/wmp.service
     systemctl daemon-reload
-    echo "  Configuration updated successfully!"
+    echo "Configuration updated successfully!"
 
 elif [ "$1" = "run" ]; then
     if [[ ! "$2" =~ ^[0-9]+$ ]]; then
-        echo "  Invalid input, please enter a positive integer! Aborting..."
+        echo "Invalid input, please enter a positive integer! Aborting..." >&2
         exit 1
     fi
     /usr/local/sbin/wmp-run $2
@@ -59,13 +63,13 @@ elif [ "$1" = "start" ]; then
     systemctl start wmp.timer
 
 elif [ "$1" = "uninstall" ]; then
-    echo "  Removing WakeMyPotato..."
+    echo "Removing WakeMyPotato..."
     systemctl stop wmp.timer
     systemctl disable wmp.timer
     rm -rf /etc/systemd/system/wmp.* /usr/local/sbin/wmp-run /usr/local/sbin/wmp
     systemctl daemon-reload
-    echo "  All clear."
+    echo "All clear."
 
 else
-    echo "  Invalid command. Use 'sudo wmp help' to see available commands."
+    echo "Invalid command. Use 'sudo wmp help' to see available commands." >&2
 fi
