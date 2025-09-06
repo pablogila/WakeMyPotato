@@ -5,7 +5,7 @@
 # It will safely power off RAID disks before an emergency shutdown on AC outage.
 # The system is automatically restored after timeout or once power is back.
 
-version="v2.3.0"
+version="v2.3.1"
 
 if [ "$1" = "help" ]; then
     echo ""

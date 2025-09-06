@@ -49,7 +49,7 @@ sed -i "s|^ExecStart=.*|ExecStart=/usr/local/sbin/wmp-check $waketime|" /etc/sys
 if ! upower -i $(upower -e | grep 'line_power') | grep -q 'online:\s*yes'; then
     echo ""
     echo "!!! WARNING: AC power is NOT connected right now!" >&2
-    echo "WakeMyPotato was installed but NOT enabled." >&2
+    echo "WakeMyPotato $(/usr/local/sbin/wmp version) was installed but NOT enabled." >&2
     echo "Make sure to connect AC before starting the service with:" >&2
     echo "sudo wmp start" >&2
     echo ""
@@ -63,6 +63,6 @@ systemctl enable wmp.timer
 systemctl start wmp.timer
 
 echo ""
-echo "WakeMyPotato is installed and running!"
+echo "WakeMyPotato $(/usr/local/sbin/wmp version) is installed and running!"
 echo "Use 'sudo wmp help' for info on user commands."
 echo ""
