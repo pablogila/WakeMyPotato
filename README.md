@@ -42,15 +42,16 @@ To check all available commands, use `sudo wmp help`.
 
 | Command | Description |
 | ------- | ----------- |
-| `sudo wmp help`          | Show all available commands |
-| `sudo wmp version`       | Print the software version |
-| `sudo wmp status`        | Check the service status |
-| `sudo wmp log`           | View recent warning logs |
-| `sudo wmp set <seconds>` | Set new configuration |
-| `sudo wmp run <seconds>` | Run a manual check |
-| `sudo wmp stop`          | Stop the service |
-| `sudo wmp start`         | Start the service |
-| `sudo wmp uninstall`     | Uninstall the service |
+| `sudo wmp help`            | Show all available commands |
+| `sudo wmp version`         | Print the software version |
+| `sudo wmp status`          | Check the service status |
+| `sudo wmp log`             | View recent warning logs |
+| `sudo wmp set <seconds>`   | Set new configuration |
+| `sudo wmp check <seconds>` | Run a manual check now |
+| `sudo wmp force <seconds>` | Force a manual shutdown now |
+| `sudo wmp stop`            | Stop the service |
+| `sudo wmp start`           | Start the service |
+| `sudo wmp uninstall`       | Uninstall the service |
 
 ## Contribute  
 
