@@ -5,22 +5,22 @@
 # It will safely power off RAID disks before an emergency shutdown on AC outage.
 # The system is automatically restored after timeout or once power is back.
 
-version="v2.3.1"
+version="v2.4.0"
 
 if [ "$1" = "help" ]; then
     echo ""
     echo "WakeMyPotato user commands:"
     echo ""
-    echo "sudo wmp help             Show this help message"
-    echo "sudo wmp version          Print the software version"
-    echo "sudo wmp status           Check the service status"
-    echo "sudo wmp log              View warning logs"
-    echo "sudo wmp set <seconds>    Set new configuration"
-    echo "sudo wmp check <seconds>  Run a manual check now"
-    echo "sudo wmp force <seconds>  Force a manual shutdown now"
-    echo "sudo wmp stop             Stop the service"
-    echo "sudo wmp start            Start the service"
-    echo "sudo wmp uninstall        Uninstall the service"
+    echo "sudo wmp help                  Show this help message"
+    echo "sudo wmp version               Print the software version"
+    echo "sudo wmp status                Check the service status"
+    echo "sudo wmp log                   View warning logs"
+    echo "sudo wmp set <seconds> [<IP>]  Set new configuration"
+    echo "sudo wmp check <seconds>       Run a manual check now"
+    echo "sudo wmp force <seconds>       Force a manual shutdown now"
+    echo "sudo wmp stop                  Stop the service"
+    echo "sudo wmp start                 Start the service"
+    echo "sudo wmp uninstall             Uninstall the service"
     echo ""
     echo "Visit the project page for more info and updates:"
     echo "https://github.com/pablogila/WakeMyPotato"
@@ -38,11 +38,17 @@ elif [ "$1" = "log" ]; then
     sudo journalctl -u wmp -p warning -r
 
 elif [ "$1" = "set" ]; then
-    if [[ ! "$2" =~ ^[0-9]+$ ]]; then
+    SECONDS=$2
+    IP=$3
+    if [[ ! "$SECONDS" =~ ^[0-9]+$ ]]; then
         echo "Invalid input, please enter a positive integer! Aborting..." >&2
         exit 1
-    fi 
-    sed -i "s|^ExecStart=.*|ExecStart=/usr/local/sbin/wmp-check $2|" /etc/systemd/system/wmp.service
+    fi
+    SETTINGS="$SECONDS"
+    if [ -n "$IP" ]; then
+        SETTINGS="$SETTINGS $IP"
+    fi
+    sed -i "s|^ExecStart=.*|ExecStart=/usr/local/sbin/wmp-check $SETTINGS|" /etc/systemd/system/wmp.service
     systemctl daemon-reload
     echo "Configuration updated successfully!"
 

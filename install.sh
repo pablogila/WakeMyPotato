@@ -37,13 +37,24 @@ if [[ ! "$waketime" =~ ^[0-9]+$ ]]; then
     exit 1
 fi
 
+SETTINGS="$waketime"
+
+# Optionally ping an IP to check the connection
+echo "OPTIONAL: enter an IP address to check the connection,"
+echo "leave empty to skip this step:"
+read -p "> " pingip
+
+if ! [[ -z "$pingip" ]]; then
+    SETTINGS="$SETTINGS $pingip"
+fi
+
 cp src/wmp.timer src/wmp.service /etc/systemd/system/
 chmod 644 /etc/systemd/system/wmp.timer /etc/systemd/system/wmp.service
 cp src/wmp src/wmp-check src/wmp-off /usr/local/sbin/
 chmod 744 /usr/local/sbin/wmp /usr/local/sbin/wmp-check /usr/local/sbin/wmp-off
 
 # Set custom wake time in service file
-sed -i "s|^ExecStart=.*|ExecStart=/usr/local/sbin/wmp-check $waketime|" /etc/systemd/system/wmp.service
+sed -i "s|^ExecStart=.*|ExecStart=/usr/local/sbin/wmp-check $SETTINGS|" /etc/systemd/system/wmp.service
 
 # Check if AC is being used right now, if not don't enable the service yet!
 if ! upower -i $(upower -e | grep 'line_power') | grep -q 'online:\s*yes'; then

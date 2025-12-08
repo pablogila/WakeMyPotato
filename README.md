@@ -31,6 +31,8 @@ sudo bash install.sh
 
 It will prompt you to enter the number of seconds to wait before waking up after a blackout.
 The default (600 seconds, a.k.a. 10 minutes) should be good for most cases.
+Optionally, an IP address can be provided to check the network connectivity,
+so that an unsuccessful ping will also trigger the shutdown.
 
 To **uninstall** the service, run `sudo wmp uninstall`.
 To **update**, simply uninstall with your current version before installing the new version.
@@ -42,16 +44,16 @@ To check all available commands, use `sudo wmp help`.
 
 | Command | Description |
 | ------- | ----------- |
-| `sudo wmp help`            | Show all available commands |
-| `sudo wmp version`         | Print the software version |
-| `sudo wmp status`          | Check the service status |
-| `sudo wmp log`             | View recent warning logs |
-| `sudo wmp set <seconds>`   | Set new configuration |
-| `sudo wmp check <seconds>` | Run a manual check now |
-| `sudo wmp force <seconds>` | Force a manual shutdown now |
-| `sudo wmp stop`            | Stop the service |
-| `sudo wmp start`           | Start the service |
-| `sudo wmp uninstall`       | Uninstall the service |
+| `sudo wmp help`                  | Show all available commands |
+| `sudo wmp version`               | Print the software version |
+| `sudo wmp status`                | Check the service status |
+| `sudo wmp log`                   | View recent warning logs |
+| `sudo wmp set <seconds> [<IP>]`  | Set new configuration |
+| `sudo wmp check <seconds>`       | Run a manual check now |
+| `sudo wmp force <seconds>`       | Force a manual shutdown now |
+| `sudo wmp stop`                  | Stop the service |
+| `sudo wmp start`                 | Start the service |
+| `sudo wmp uninstall`             | Uninstall the service |
 
 ## Contribute  
 
