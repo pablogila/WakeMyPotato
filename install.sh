@@ -45,7 +45,7 @@ echo "leave empty to skip this step:"
 read -p "> " pingip
 
 if ! [[ -z "$pingip" ]]; then
-    SETTINGS="$SETTINGS $pingip"
+    SETTINGS="$waketime $pingip"
 fi
 
 cp src/wmp.timer src/wmp.service /etc/systemd/system/

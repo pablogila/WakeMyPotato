@@ -12,23 +12,23 @@
 # For e.g. 1000s, checking also the connection to an IP address:
 # /usr/local/sbin/wmp-check 1000 192.168.1.1
 
-SECONDS=$1
-IP=$2
+WAKETIME=$1
+PINGIP=$2
 
 # New wake up call, without powering off the system.
 # This runs first, in case the battery is so low that the rest of the script cannot run!
-rtcwake -m no -s "$SECONDS"
+rtcwake -m no -s "$WAKETIME"
 
 # If there is no AC power but the system is still running, let's shut it down safely
 if ! upower -i $(upower -e | grep 'line_power') | grep -q 'online:\s*yes'; then
-    /usr/local/sbin/wmp-off "$SECONDS"
+    /usr/local/sbin/wmp-off "$WAKETIME"
     exit 0
 fi
 
 # If an IP is provided, check that we can ping it, otherwise shut down
-if [ -n "$IP" ]; then
-    if ! ping -q -c1 "$IP" &> /dev/null; then
-        /usr/local/sbin/wmp-off "$SECONDS"
+if [ -n "$PINGIP" ]; then
+    if ! ping -q -c1 "$PINGIP" &> /dev/null; then
+        /usr/local/sbin/wmp-off "$WAKETIME"
         exit 0
     fi
 fi

@@ -5,7 +5,7 @@
 # It will safely power off RAID disks before an emergency shutdown on AC outage.
 # The system is automatically restored after timeout or once power is back.
 
-version="v2.4.1"
+version="v2.4.2a1"
 
 if [ "$1" = "help" ]; then
     echo ""
@@ -38,32 +38,28 @@ elif [ "$1" = "log" ]; then
     sudo journalctl -u wmp -p warning -r
 
 elif [ "$1" = "set" ]; then
-    SECONDS=$2
-    IP=$3
-    if [[ ! "$SECONDS" =~ ^[0-9]+$ ]]; then
+    WAKETIME=$2
+    PINGIP=$3
+    if [[ ! "$WAKETIME" =~ ^[0-9]+$ ]]; then
         echo "Invalid input, please enter a positive integer! Aborting..." >&2
         exit 1
     fi
-    SETTINGS="$SECONDS"
-    if [ -n "$IP" ]; then
-        SETTINGS="$SETTINGS $IP"
+    SETTINGS="$WAKETIME"
+    if [ -n "$PINGIP" ]; then
+        SETTINGS="$SETTINGS $PINGIP"
     fi
     sed -i "s|^ExecStart=.*|ExecStart=/usr/local/sbin/wmp-check $SETTINGS|" /etc/systemd/system/wmp.service
     systemctl daemon-reload
     echo "Configuration updated successfully!"
 
 elif [ "$1" = "check" ]; then
-    SECONDS=$2
-    IP=$3
-    if [[ ! "$SECONDS" =~ ^[0-9]+$ ]]; then
+    WAKETIME=$2
+    PINGIP=$3
+    if [[ ! "$WAKETIME" =~ ^[0-9]+$ ]]; then
         echo "Invalid input, please enter a positive integer! Aborting..." >&2
         exit 1
     fi
-    SETTINGS="$SECONDS"
-    if [ -n "$IP" ]; then
-        SETTINGS="$SETTINGS $IP"
-    fi
-    /usr/local/sbin/wmp-check "$SETTINGS"
+    /usr/local/sbin/wmp-check "$SETTINGS" "$PINGIP"
 
 elif [ "$1" = "force" ]; then
     if [[ ! "$2" =~ ^[0-9]+$ ]]; then
