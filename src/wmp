@@ -5,7 +5,7 @@
 # It will safely power off RAID disks before an emergency shutdown on AC outage.
 # The system is automatically restored after timeout or once power is back.
 
-version="v2.4.2a1"
+version="v2.4.2a2"
 
 if [ "$1" = "help" ]; then
     echo ""
@@ -59,7 +59,11 @@ elif [ "$1" = "check" ]; then
         echo "Invalid input, please enter a positive integer! Aborting..." >&2
         exit 1
     fi
-    /usr/local/sbin/wmp-check "$SETTINGS" "$PINGIP"
+    #if [ -z "$PINGIP" ]; then
+    #    /usr/local/sbin/wmp-check "$WAKETIME"
+    #    exit 0
+    #fi
+    /usr/local/sbin/wmp-check "$WAKETIME" "$PINGIP"
 
 elif [ "$1" = "force" ]; then
     if [[ ! "$2" =~ ^[0-9]+$ ]]; then
