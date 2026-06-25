@@ -11,6 +11,12 @@
 # A shutdown can be forced with
 # sudo wmp force <seconds>
 
+# Check that the input waketime is valid
+if [[ ! "$1" =~ ^[0-9]+$ ]]; then
+        echo "Invalid input, please enter a positive integer! Aborting..." >&2
+        exit 1
+fi
+
 echo -e "WakeMyPotato: Emergency shutdown on AC power outage!\nThe service will try to restart automatically in $1 seconds..." | wall
 echo "Emergency shutdown on AC power outage!" | systemd-cat -p 'alert' -t 'wmp'
 # Safely force unmount and power-off RAID HDDs
@@ -44,4 +50,4 @@ done
 # Safely power off the system for the specified time or until AC is back
 echo "Shutting down NOW! Scheduled boot in $1 s" | systemd-cat -p 'warning' -t 'wmp'
 echo rtcwake -m off -s $1 | systemd-cat -t 'wmp'
-rtcwake -m off -s $1
+rtcwake -m off -s "$1"

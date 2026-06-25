@@ -44,7 +44,11 @@ echo "OPTIONAL: enter an IP address to check the connection,"
 echo "leave empty to skip this step:"
 read -p "> " pingip
 
-if ! [[ -z "$pingip" ]]; then
+if [[ -n "$pingip" ]]; then
+    if [[ ! "$pingip" =~ ^[A-Za-z0-9._:-]+$ ]]; then
+        echo "!!! ABORTING: Invalid input, please use only letters, digits, dots, hyphens and colons." >&2
+        exit 1
+    fi
     SETTINGS="$waketime $pingip"
 fi
 
@@ -57,7 +61,7 @@ chmod 744 /usr/local/sbin/wmp /usr/local/sbin/wmp-check /usr/local/sbin/wmp-off
 sed -i "s|^ExecStart=.*|ExecStart=/usr/local/sbin/wmp-check $SETTINGS|" /etc/systemd/system/wmp.service
 
 # Check if AC is being used right now, if not don't enable the service yet!
-if ! upower -i $(upower -e | grep 'line_power') | grep -q 'online:\s*yes'; then
+if ! upower -i "$(upower -e | grep 'line_power')" | grep -q 'online:\s*yes'; then
     echo ""
     echo "!!! WARNING: AC power is NOT connected right now!" >&2
     echo "WakeMyPotato $(/usr/local/sbin/wmp version) was installed but NOT enabled." >&2

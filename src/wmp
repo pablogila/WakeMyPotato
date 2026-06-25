@@ -5,7 +5,7 @@
 # It will safely power off RAID disks before an emergency shutdown on AC outage.
 # The system is automatically restored after timeout or once power is back.
 
-version="v2.4.2"
+version="v2.4.3"
 
 if [ "$1" = "help" ]; then
     echo ""
@@ -46,6 +46,10 @@ elif [ "$1" = "set" ]; then
     fi
     SETTINGS="$WAKETIME"
     if [ -n "$PINGIP" ]; then
+        if [[ ! "$PINGIP" =~ ^[A-Za-z0-9._:-]+$ ]]; then
+            echo "Invalid PINGIP, please use only letters, digits, dots, hyphens and colons." >&2
+            exit 1
+        fi
         SETTINGS="$SETTINGS $PINGIP"
     fi
     sed -i "s|^ExecStart=.*|ExecStart=/usr/local/sbin/wmp-check $SETTINGS|" /etc/systemd/system/wmp.service
