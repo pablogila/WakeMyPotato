@@ -15,12 +15,14 @@
 WAKETIME=$1
 PINGIP=$2
 
-# New wake up call, without powering off the system.
-# This runs first, in case the battery is so low that the rest of the script cannot run!
 # Check WAKETIME is valid:
 if [[ ! "$WAKETIME" =~ ^[0-9]+$ ]]; then
     echo "Invalid WAKETIME, not an integer! Aborting..." >&2
     exit 1
+fi
+
+# New wake up call, without powering off the system.
+# This runs first, in case the battery is so low that the rest of the script cannot run!
 rtcwake -m no -s "$WAKETIME"
 
 # If there is no AC power but the system is still running, let's shut it down safely
